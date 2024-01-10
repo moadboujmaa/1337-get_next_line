@@ -6,7 +6,7 @@
 /*   By: mboujama <mboujama@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 22:46:50 by mboujama          #+#    #+#             */
-/*   Updated: 2024/01/09 12:10:28 by mboujama         ###   ########.fr       */
+/*   Updated: 2024/01/10 15:41:44 by mboujama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ size_t	ft_strlen(const char *s)
 	size_t	i;
 
 	i = 0;
-	while (*s++)
+	while (s[i])
 		i++;
 	return (i);
 }
@@ -58,29 +58,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	j = 0;
 	while (j < ft_strlen(s2))
 		ptr[i++] = s2[j++];
-	ptr[i] = '\0';
-	return (ptr);
-}
-
-char	*ft_substr(char const *s, unsigned int start, size_t len)
-{
-	size_t	i;
-	char	*ptr;
-
-	if (start >= ft_strlen(s))
-		return (ft_strdup(""));
-	if (len > ft_strlen(s) - start)
-		len = ft_strlen(s) - start;
-	ptr = (char *) malloc(sizeof(char) * len + 1);
-	if (!ptr)
-		return (NULL);
-	i = 0;
-	while (i < len)
-	{
-		ptr[i] = s[start];
-		i++;
-		start++;
-	}
 	ptr[i] = '\0';
 	return (ptr);
 }
