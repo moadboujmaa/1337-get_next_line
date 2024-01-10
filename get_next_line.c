@@ -6,38 +6,16 @@
 /*   By: mboujama <mboujama@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 22:46:47 by mboujama          #+#    #+#             */
-/*   Updated: 2024/01/07 19:33:06 by mboujama         ###   ########.fr       */
+/*   Updated: 2024/01/09 15:01:54 by mboujama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_strdup(const char *s1)
-{
-	size_t	i;
-	char	*ptr;
-	int		len;
-
-	len = 0;
-	while (s1[len])
-		len++;
-	ptr = (char *) malloc(len + 1);
-	if (!ptr)
-		return (0);
-	i = 0;
-	while (s1[i])
-	{
-		ptr[i] = s1[i];
-		i++;
-	}
-	ptr[i] = '\0';
-	return (ptr);
-}
-
 char	*get_remainder(char *str)
 {
 	char	*remainder;
-	int 	i;
+	int		i;
 
 	i = 0;
 	while (str[i] != '\n' && str[i])
@@ -46,26 +24,84 @@ char	*get_remainder(char *str)
 	return (remainder);
 }
 
-char	*get_next_line(int fd)
+char	*get_until_newline(char *remainder)
 {
-	static char	*remainder;
-	char		*str;
-	int			i;
+	char	*str;
+	int		i;
 
-	str = (char *) malloc(BUFFER_SIZE + 1);
-	if (!str)
-		return (NULL);
-	read(fd, str, BUFFER_SIZE);
-	remainder = get_remainder(str);
-	printf("Remainder is: %s\n", remainder);
+	i = 0;
+	while (remainder[i] && remainder[i] != '\n')
+		i++;
+	str = (char *)malloc(sizeof(char) * (i + 1));
+	i = 0;
+	while (remainder[i] && remainder[i] != '\n')
+	{
+		str[i] = remainder[i];
+		i++;
+	}
+	str[i] = '\0';
 	return (str);
 }
 
-// int	main(void)
-// {
-// 	int	fd;
+int	is_has_newline(char	*str)
+{
+	int	i;
 
-// 	fd = open("test.txt", O_RDWR);
-// 	get_next_line(fd);
-// 	return (0);
-// }
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '\n')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+char	*get_next_line(int fd)
+{
+	static char	remainder[BUFFER_SIZE * 5];
+	char		*str;
+	char		*line;
+	char		*tmp;
+	int			i;
+
+	line = NULL;
+	tmp = NULL;
+	str = (char *) malloc(BUFFER_SIZE + 1);
+	if (!str)
+		return (NULL);
+	if (remainder[0] == '\0')
+		read(fd, remainder, BUFFER_SIZE);
+	if (remainder[0] != '\0')
+	{
+		if (!is_has_newline(remainder))
+		{
+			read(fd, str, BUFFER_SIZE);
+			tmp = ft_strjoin(remainder, str);
+			printf("TMP = %s\n", tmp);
+			i = 0;
+			while (tmp[i])
+			{
+				remainder[i] = tmp[i];
+				i++;
+			}
+			line = get_until_newline(remainder);
+		}
+		if (is_has_newline(remainder))
+		{
+			line = get_until_newline(remainder);
+		}
+	}
+	return (line);
+}
+
+int	main(void)
+{
+	int		fd;
+
+	fd = open("test.txt", O_RDWR);
+	printf("------> LINES <------\n");
+	printf("[1] %s\n", get_next_line(fd));
+	printf("[2] %s\n", get_next_line(fd));
+	return (0);
+}
