@@ -6,7 +6,7 @@
 /*   By: mboujama <mboujama@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 22:46:50 by mboujama          #+#    #+#             */
-/*   Updated: 2024/01/10 15:41:44 by mboujama         ###   ########.fr       */
+/*   Updated: 2024/01/11 10:16:05 by mboujama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,10 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	size_t	i;
 	size_t	j;
 	char	*ptr;
-	size_t	len;
 
-	len = ft_strlen(s1) + ft_strlen(s2) + 1;
-	ptr = (char *) malloc(len * sizeof(char));
+	if (!s1 || !s2)
+		return (NULL);
+	ptr = (char *) malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (!ptr)
 		return (0);
 	i = 0;

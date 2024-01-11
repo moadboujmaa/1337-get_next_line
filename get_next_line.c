@@ -6,7 +6,7 @@
 /*   By: mboujama <mboujama@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 22:46:47 by mboujama          #+#    #+#             */
-/*   Updated: 2024/01/10 15:40:41 by mboujama         ###   ########.fr       */
+/*   Updated: 2024/01/11 14:39:25 by mboujama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*get_new_remainder(char *str)
 	return (remainder);
 }
 
-// Retrun from the beginning until found '\n' => "line"
+// Return from the beginning until found '\n' => "line"
 char	*get_until_newline(char *remainder)
 {
 	char	*str;
@@ -35,6 +35,8 @@ char	*get_until_newline(char *remainder)
 	while (remainder[i] && remainder[i] != '\n')
 		i++;
 	str = (char *)malloc(sizeof(char) * (i + 1));
+	if (!str)
+		return (NULL);
 	i = 0;
 	while (remainder[i] && remainder[i] != '\n')
 	{
@@ -50,6 +52,8 @@ int	is_has_newline(char	*str)
 {
 	int	i;
 
+	if (!str)
+		return (0);
 	i = 0;
 	while (str[i])
 	{
@@ -86,6 +90,8 @@ char	*get_next_line(int fd)
 	char		*line;
 	int			read_bytes;
 
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
 	line = NULL;
 	tmp = (char *)malloc(sizeof(char) * (BUFFER_SIZE));
 	if (!tmp)
@@ -99,11 +105,19 @@ char	*get_next_line(int fd)
 		{
 			read_bytes = read(fd, tmp, BUFFER_SIZE);
 			remainder = ft_strjoin(remainder, tmp);
+			free(tmp);
 		}
 		if (is_has_newline(remainder))
 		{
 			line = get_until_newline(remainder);
 			remainder = get_new_remainder(remainder);
+		}
+		else if (!is_has_newline(remainder) && read_bytes == 0 && remainder)
+		{
+			line = ft_strdup(remainder);
+			free(remainder);
+			remainder = NULL;
+			return (NULL);
 		}
 	}
 	return (line);
@@ -111,17 +125,20 @@ char	*get_next_line(int fd)
 
 // int	main(void)
 // {
-// 	int	fd;
-// 	int	i;
+// 	int		fd;
+// 	int		i;
+// 	char	*ptr;
 
 // 	i = 1;
 // 	fd = open("test.txt", O_RDWR);
 // 	printf("FD = %d\n", fd);
 // 	printf("------> LINES <------\n");
-// 	while (i <= 26)
+// 	while ((ptr = get_next_line(fd)))
 // 	{
-// 		printf("[%d] = {%s}\n", i, get_next_line(fd));
+// 		printf("[%d] = {%s}\n", i, ptr);
+// 		free(ptr);
 // 		i++;
 // 	}
+// 	system("leaks a.out");
 // 	return (0);
 // }
