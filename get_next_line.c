@@ -6,7 +6,7 @@
 /*   By: mboujama <mboujama@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 22:46:47 by mboujama          #+#    #+#             */
-/*   Updated: 2024/01/16 16:19:47 by mboujama         ###   ########.fr       */
+/*   Updated: 2024/01/17 15:32:24 by mboujama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	*get_until_newline(char *remainder)
 		return (NULL);
 	while (remainder[i] && remainder[i] != '\n')
 		i++;
-	str = (char *)malloc(sizeof(char) * (i + 1));
+	str = (char *)malloc(sizeof(char) * (i + 2));
 	if (!str)
 		return (NULL);
 	i = 0;
@@ -51,6 +51,11 @@ char	*get_until_newline(char *remainder)
 		str[i] = remainder[i];
 		i++;
 	}
+	if (remainder[i] == '\n') // If the character is a newline, include it in the string
+    {
+        str[i] = remainder[i];
+        i++;
+    }
 	str[i] = '\0';
 	return (str);
 }
@@ -80,8 +85,8 @@ char	*get_next_line(int fd)
 	char		*line;
 	int			read_bytes;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || !fd)
-		return (NULL);
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (free(remainder), NULL);
 	line = NULL;
 	tmp = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!tmp)
@@ -92,7 +97,7 @@ char	*get_next_line(int fd)
 	while (!is_has_newline(remainder) && read_bytes > 0)
 	{
 		read_bytes = read(fd, tmp, BUFFER_SIZE);
-		if (read_bytes <= 0)
+		if (read_bytes == -1)
 			return (free(tmp), tmp = NULL, NULL);
 		tmp[read_bytes] = '\0';
 		remainder = ft_strjoin(remainder, tmp);
@@ -111,16 +116,14 @@ int	main(void)
 {
 	int		fd;
 	char	*ptr;
-	int		i;
 
-	i = 1;
 	fd = open("test.txt", O_RDONLY);
 	ptr = get_next_line(fd);
 	while (ptr)
 	{
-		printf("[%d] line = {%s}\n", i, ptr);
+		printf("line = {%s}\n", ptr);
+		free(ptr);
 		ptr = get_next_line(fd);
-		i++;
 	}
 	return (0);
 }

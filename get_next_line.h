@@ -6,7 +6,7 @@
 /*   By: mboujama <mboujama@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 22:46:53 by mboujama          #+#    #+#             */
-/*   Updated: 2024/01/16 15:32:23 by mboujama         ###   ########.fr       */
+/*   Updated: 2024/01/17 11:30:49 by mboujama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define GET_NEXT_LINE_H
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 999
+#  define BUFFER_SIZE 10
 # endif
 
 # include <stdlib.h>
