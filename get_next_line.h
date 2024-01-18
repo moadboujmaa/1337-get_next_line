@@ -6,7 +6,7 @@
 /*   By: mboujama <mboujama@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 22:46:53 by mboujama          #+#    #+#             */
-/*   Updated: 2024/01/17 11:30:49 by mboujama         ###   ########.fr       */
+/*   Updated: 2024/01/18 12:40:51 by mboujama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,6 @@ char	*get_next_line(int fd);
 size_t	ft_strlen(const char *s);
 char	*ft_strdup(const char *s1);
 char	*ft_strjoin(char *s1, char *s2);
+char	*ft_strchr(const char *s, int c);
 
 #endif
