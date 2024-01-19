@@ -6,7 +6,7 @@
 /*   By: mboujama <mboujama@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 18:59:18 by mboujama          #+#    #+#             */
-/*   Updated: 2024/01/19 21:59:16 by mboujama         ###   ########.fr       */
+/*   Updated: 2024/01/19 22:47:47 by mboujama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,18 +107,3 @@ char	*get_next_line(int fd)
 			free(tmp), tmp = NULL, NULL);
 	return (free(tmp), tmp = NULL, line);
 }
-
-// int	main(void)
-// {
-// 	int		fd;
-// 	char	*ptr;
-
-// 	fd = open("test.txt", O_RDONLY);
-// 	ptr = get_next_line(fd);
-// 	while (ptr)
-// 	{
-// 		printf("line 1 = {{%s}}\n", ptr);
-// 		ptr = get_next_line(fd);
-// 	}
-// 	return (0);
-// }
