@@ -1,14 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mboujama <mboujama@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/29 22:46:47 by mboujama          #+#    #+#             */
-/*   Updated: 2024/01/19 21:09:02 by mboujama         ###   ########.fr       */
+/*   Created: 2024/01/19 18:59:18 by mboujama          #+#    #+#             */
+/*   Updated: 2024/01/19 21:59:16 by mboujama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "get_next_line_bonus.h"
 
 #include "get_next_line.h"
 
@@ -79,29 +81,30 @@ int	read_into_remainder(int fd, char **remainder, char **tmp, int *read_bytes)
 // Main function
 char	*get_next_line(int fd)
 {
-	static char	*remainder;
+	static char	*remainder[4000];
 	char		*tmp;
 	char		*line;
 	int			read_bytes;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, NULL, 0) == -1)
-		return (free(remainder), remainder = NULL, NULL);
+		return (free(remainder[fd]), remainder[fd] = NULL, NULL);
 	line = NULL;
 	tmp = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!tmp)
 		return (NULL);
 	read_bytes = 1;
-	if (!remainder)
-		remainder = ft_strdup("");
-	if (!read_into_remainder(fd, &remainder, &tmp, &read_bytes))
+	if (!remainder[fd])
+		remainder[fd] = ft_strdup("");
+	if (!read_into_remainder(fd, &remainder[fd], &tmp, &read_bytes))
 		return (NULL);
-	if (read_bytes != 0 || ft_strlen(remainder) > 0)
+	if (read_bytes != 0 || ft_strlen(remainder[fd]) > 0)
 	{
-		line = get_until_newline(remainder);
-		remainder = get_new_remainder(remainder);
+		line = get_until_newline(remainder[fd]);
+		remainder[fd] = get_new_remainder(remainder[fd]);
 	}
 	else
-		return (free(remainder), remainder = NULL, free(tmp), tmp = NULL, NULL);
+		return (free(remainder[fd]), remainder[fd] = NULL,
+			free(tmp), tmp = NULL, NULL);
 	return (free(tmp), tmp = NULL, line);
 }
 
